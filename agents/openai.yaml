@@ -1,0 +1,4 @@
+interface:
+  display_name: "Android Performance"
+  short_description: "Diagnose Android jank and Compose performance"
+  default_prompt: "Use $android-performance to investigate this Android performance issue and validate a focused fix."
