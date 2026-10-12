@@ -4,6 +4,26 @@ A portable agent skill for investigating Android and Jetpack Compose performance
 
 It helps an agent follow the path from user input to a useful frame, identify expensive or repeated work, make focused changes, and separate hypotheses from measured improvements.
 
+## Quick start
+
+From your Android project's root, install for Claude Code, Codex, and Cursor:
+
+```sh
+npx skills add timkabot/android-performance-skill --agent claude-code codex cursor
+```
+
+Requires Node.js/npm and Git. The [Skills CLI](https://github.com/vercel-labs/skills) downloads the skill and handles the agent directories. Keep only the agent names you use. Add `--global` to install for your user across projects, or `--copy` if you prefer copies instead of symlinks.
+
+Prefer to choose your agents interactively?
+
+```sh
+npx skills add timkabot/android-performance-skill
+```
+
+Start a new agent session, then ask: **"Use the android-performance skill to investigate scroll jank in FeedScreen."**
+
+Project installation for all three agents was tested with Skills CLI 1.7.2 on 2026-10-12. The installed skill and all reference files were checked against the source. This checks installation, not runtime behavior inside each agent.
+
 ## What it covers
 
 - Main-thread work, coroutines, Flow, cancellation, and scheduling.
@@ -14,7 +34,10 @@ It helps an agent follow the path from user input to a useful frame, identify ex
 
 No company-specific architecture, custom ViewModel, MCP server, API key, or runtime dependency is required. This is an instruction-only skill; it uses the tools and build setup already available in your Android project.
 
-## Install
+## Manual installation
+
+<details>
+<summary>Install with Git or copy files without Node.js</summary>
 
 Requires Git and an agent version supporting local Agent Skills. Commands below work in macOS/Linux shells and Git Bash. Run only the installation for the tool you use; **Codex and Cursor share the same installation** below.
 
@@ -59,6 +82,8 @@ Copy the files, not the repository's `.git` directory. Commit the copied skill i
 
 Local user installations do not automatically reach remote/cloud environments. Install or commit the skill where the agent actually runs.
 
+</details>
+
 ## Use
 
 Start a new agent session after installation. Explicit examples:
@@ -89,6 +114,15 @@ Useful requests:
 The skill can inspect code without a device. Runtime improvement claims still need runtime measurements; the agent should state when those are unavailable.
 
 ## Update or remove
+
+For a project installed with the Skills CLI:
+
+```sh
+npx skills update android-performance --project
+npx skills remove android-performance
+```
+
+For a global installation, use `npx skills update android-performance --global` or `npx skills remove android-performance --global`. These are separate actions: run update to refresh the skill, or remove to uninstall it.
 
 For a Git-cloned installation:
 
