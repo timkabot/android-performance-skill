@@ -34,6 +34,16 @@ LazyColumn {
 - Read only visible layout metadata in scroll collectors; do not scan the entire data set per pixel.
 - Keep pagination dedupe and in-flight/last-page checks in the state owner. A UI threshold can emit repeatedly as layout changes.
 
+## Less obvious costs
+
+- A `LazyRow` for three permanently visible chips can add avoidable subcomposition. Compare with a simple layout while preserving overflow behavior.
+- `BoxWithConstraints` or other subcomposition in every row should have a demonstrated need. Derive shared constraints once when semantics allow it.
+- Per-item system listeners can multiply binder work. Hoist shared environment state with correct registration/disposal ownership; moving each registration to IO still leaves duplicated work.
+- Local resource images may decode during composition; an async network image loader does not make all resource loading asynchronous. Trace actual decoding.
+- Lazy prefetch/cache-window tuning is version-specific and trades future frame work against CPU and retained memory. Keep defaults until traces justify a change; test fast flings, reverse scroll, and low-memory conditions.
+
+These are investigation leads, not instructions to remove every nested layout. See the [Google performance codelab](https://developer.android.com/codelabs/jetpack-compose-performance) and [Google's Compose performance update](https://android-developers.googleblog.com/2025/11/fully-optimized-wrapping-up-performance.html).
+
 ## Nesting
 
 Flatten unbounded same-axis scrolling into a single lazy container where practical. Bounded nested scrolling can be valid; inspect measurement constraints and UX before rewriting it. Cross-axis carousels still need sensible dimensions, stable outer/inner keys, and measured item cost. For a handful of fixed items, an ordinary `Row` or `Column` may be simpler.

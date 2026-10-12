@@ -32,4 +32,18 @@ Discover commands from the target repository's instructions and Gradle configura
 
 Build success establishes no runtime improvement. Skippability is a compiler property, recomposition counts describe activity, and a trace explains a particular run. Report those separately from a repeated before/after benchmark result.
 
+## Experiment contract
+
+Before measuring, record the suspected cause, target metric, expected effect, and a guardrail that could worsen (for example memory for a caching change). Keep the workload fixed. Preserve raw run results, iteration counts and variability; a p99 from a tiny sample or one best run is not persuasive. Use a stable baseline and consider interleaving before/after runs when drift is a concern.
+
+For field comparisons, document metric units, numerator/denominator, eligible users/devices, collection coverage, and version/OS/device/network cohorts. Distinguish per-frame, per-session and per-user rates. Check rollout mix and missing telemetry before attributing a change to code; published case studies do not establish expected lift for another app.
+
+Measure startup, first interaction, steady scrolling, and longer sessions when the change can move cost between them. Do not use fixed sleeps as proof that data is ready in a benchmark. Choose explicit application signals and preserve failure/timeout behavior.
+
+Use heap/allocation/method profiling to locate causes, then measure with lighter instrumentation. Avoid changing compiler settings, device refresh rate, caches, or thermal behavior between variants without documenting it. Retain failed and slow runs unless exclusion rules were justified beforehand.
+
+## Tool and version choice
+
+Prefer the existing working stack. Perfetto/system traces, Android Studio profilers, JankStats and Macrobenchmark answer different questions. [Android Performance Analyzer](https://developer.android.com/android-performance-analyzer) provides an additional system/frame profiling path; check its current device/tool requirements before suggesting setup. New tools are optional, not prerequisites for an ordinary code review. Do not require an AGP/library upgrade solely to follow a sample from a talk.
+
 Sources: [rendering and Android vitals](https://developer.android.com/topic/performance/vitals/render), [JankStats](https://developer.android.com/topic/performance/jankstats), [Macrobenchmark metrics](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-metrics), [Macrobenchmark setup](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview).

@@ -2,7 +2,7 @@
 
 A portable agent skill for investigating Android and Jetpack Compose performance. Works with **Claude Code, Codex, and Cursor** using the same `SKILL.md` and reference files.
 
-It helps an agent follow the path from user input to a useful frame, identify expensive or repeated work, make focused changes, and separate hypotheses from measured improvements.
+It helps an agent diagnose slow startup, jank, ANRs, memory growth, slow data loading, and background drain. It connects a symptom to evidence, a focused fix, and a before/after check while separating hypotheses from measured improvements.
 
 ## Quick start
 
@@ -27,10 +27,24 @@ Project installation for all three agents was tested with Skills CLI 1.7.2 on 20
 ## What it covers
 
 - Main-thread work, coroutines, Flow, cancellation, and scheduling.
+- Startup readiness, SDK initialization, first-use latency, and ANR deadlines.
 - Compose stability, strong skipping, recomposition, and effects.
 - Lazy lists/grids, keys, nesting, pagination, and scroll restoration.
 - Coherent state publication, image loading, and bounded prefetch.
-- Animation cost, allocation churn, Perfetto, and benchmark validation.
+- Memory/resource leaks, native/graphics footprint, allocation churn, and process loss.
+- SQL/query plans, transactions, HTTP caching, duplicate requests, and retries.
+- Background jobs, wake locks, network radio use, and thermal behavior.
+- R8, Baseline/Startup Profiles, release artifacts, and SDK footprint.
+- Views/Compose interoperability, GPU work, WebView, and animation cost.
+- Perfetto, measurement guardrails, field cohorts, and benchmark validation.
+
+The entry point routes to **14 focused reference guides**. Each new diagnostic guide connects concrete patterns to confirmation steps, constrained fixes, and validation. The agent reads only the relevant topics.
+
+## Evidence and evaluation
+
+The [2026-10-12 research review](.docs_generated/research/2026-10-12-android-performance-landscape.md) connects the guidance to Google documentation, production cases from Google and Meta, Google I/O / Android Dev Summit resources, and empirical research. It records source limitations, including videos whose full recordings were not reviewed. Case-study improvements are not promises for your app.
+
+There are [18 behavioral evaluation scenarios](.docs_generated/evals/performance-scenarios.md) for checking diagnosis, fix semantics, uncertainty, and validation. They are a manual review/evaluation specification; no independent before/after model evaluation has been completed.
 
 No company-specific architecture, custom ViewModel, MCP server, API key, or runtime dependency is required. This is an instruction-only skill; it uses the tools and build setup already available in your Android project.
 
@@ -110,6 +124,10 @@ Useful requests:
 - "Our refresh is fast on the network but slow to render. Find the critical path."
 - "Investigate duplicate lazy keys without losing item state."
 - "Interpret this Perfetto trace and suggest a before/after benchmark."
+- "This receiver ANRs despite goAsync. Find the deadline and blocked work."
+- "Memory grows after repeated navigation. Separate leaks from cache growth."
+- "Review our release configuration and Baseline Profile coverage."
+- "Find why background sync drains battery without sacrificing freshness."
 
 The skill can inspect code without a device. Runtime improvement claims still need runtime measurements; the agent should state when those are unavailable.
 
@@ -138,6 +156,7 @@ Use the `.claude/skills` path if you cloned there instead. A linked Claude insta
 SKILL.md          Shared entry point and reference routing
 references/       Focused performance investigation guides
 agents/openai.yaml  Optional Codex display metadata
+.docs_generated/  Research rationale and evaluation scenarios
 ```
 
 The skill is framework-neutral within Android/Kotlin. Its code examples are illustrative and should be adapted to the target app. References link to public Android, Kotlin, and Perfetto documentation.
